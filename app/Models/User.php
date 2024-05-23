@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'mobile',
     ];
 
     /**
@@ -42,7 +43,15 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
+    }
+
+    /**
+     * Find the user instance for the given username.
+     */
+    public function findForPassport(string $username): User
+    {
+        return $this->where('mobile', $username)->first();
     }
 }

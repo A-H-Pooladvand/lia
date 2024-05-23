@@ -112,7 +112,7 @@ class Response extends BaseResponse
 
     public function noContent(): JsonResponse
     {
-        $this->data = '';
+        $this->data = [];
         return $this->response(self::HTTP_NO_CONTENT);
     }
 }

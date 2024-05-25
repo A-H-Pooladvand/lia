@@ -5,6 +5,7 @@ namespace App\Repositories;
 use RuntimeException;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use function app;
 
 abstract class Repository
@@ -40,9 +41,9 @@ abstract class Repository
         $this->model = $model;
     }
 
-    public function all(): Collection
+    public function all(): LengthAwarePaginator
     {
-        return $this->model->all();
+        return $this->model->paginate();
     }
 
     public function create(array $data): Model
@@ -60,8 +61,13 @@ abstract class Repository
         return $this->model->destroy($id);
     }
 
-    public function find($id): Model
+    public function find($id): Model|Collection
     {
         return $this->model->findOrFail($id);
+    }
+
+    public function findMany($id): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->model->findMany($id);
     }
 }

@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Models\Token;
+use App\Models\Order;
 use App\Models\Client;
 use App\Models\AuthCode;
 use App\Models\RefreshToken;
 use Laravel\Passport\Passport;
+use App\Observers\OrderObserver;
 use App\Models\PersonalAccessClient;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
@@ -26,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+//        Order::observe(OrderObserver::class);
+
+        // Todo:: Move to dedicated provider
+
         Passport::enablePasswordGrant();
 
         $loader = AliasLoader::getInstance();

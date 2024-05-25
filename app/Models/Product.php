@@ -9,5 +9,10 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $guarded = ['id', '_id'];
+
+    public function hasInventoryOf(int $count): bool
+    {
+        return $this->inventory >= $count;
+    }
 }

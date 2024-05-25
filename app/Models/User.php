@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use MongoDB\BSON\ObjectId;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Auth\User as Authenticatable;
@@ -10,6 +11,8 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    public const string ADMIN_USER_ID = '664f65eacd9ff4342c041adc';
+
     use HasFactory, Notifiable, HasApiTokens;
 
     /**
@@ -33,6 +36,11 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public static function adminUserId(): ObjectId
+    {
+        return new ObjectId(self::ADMIN_USER_ID);
+    }
 
     /**
      * Get the attributes that should be cast.

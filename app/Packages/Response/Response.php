@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response as BaseResponse;
 class Response extends BaseResponse
 {
     protected mixed $data;
-    protected string $message = 'OK';
+    protected string|array $message = 'OK';
 
     public function ok(mixed $data): JsonResponse
     {
@@ -37,7 +37,7 @@ class Response extends BaseResponse
         return $this->response(self::HTTP_CREATED);
     }
 
-    public function withMessage(string $message): static
+    public function withMessage(string|array $message): static
     {
         $this->message = $message;
 
@@ -69,6 +69,15 @@ class Response extends BaseResponse
         );
     }
 
+    public function unprocessableEntity(string|array $message): JsonResponse
+    {
+        $this->data = [];
+
+        $this->withMessage($message);
+
+        return $this->response(static::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
     private function getOutput(): array
     {
         $result = [
@@ -83,6 +92,10 @@ class Response extends BaseResponse
             $result = [...$result, ...$this->data];
         } elseif (filled($this->data)) {
             $result['data'] = $this->data;
+        }
+
+        if (blank($this->data)) {
+            unset($result['data']);
         }
 
         return $result;

@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Collection;
 use App\Repositories\ProductRepository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ProductService
 {
@@ -14,7 +15,7 @@ class ProductService
     {
     }
 
-    public function getAllProducts(): Collection
+    public function getAllProducts(): LengthAwarePaginator
     {
         return $this->productRepository->all();
     }

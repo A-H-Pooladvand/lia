@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Product\V1;
 
+use Cache;
+use Illuminate\Http\Request;
 use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -14,18 +16,20 @@ class ProductController extends Controller
     ) {
     }
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $products = $this->productService->getAllProducts();
+        $products = Cache::remember($request->fullUrl(), now()->addMinute(), function () {
+            return $this->productService->getAllProducts();
+        });
 
-        return apiResponse()->ok([
-            'products' => $products
-        ]);
+        return apiResponse()->paginate($products);
     }
 
-    public function show($product): JsonResponse
+    public function show(Request $request, $id): JsonResponse
     {
-        $product = $this->productService->getProductById($product);
+        $product = Cache::remember($request->fullUrl(), now()->addMinute(), function () use ($id) {
+            return $this->productService->getProductById($id);
+        });
 
         return apiResponse()->ok([
             'product' => $product

@@ -24,7 +24,7 @@ class LoginController
 
         $response = App::handle($response);
 
-        $content = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $content = json_decode($response->getContent(), true);
 
         return response()->json($content, $response->getStatusCode());
     }
